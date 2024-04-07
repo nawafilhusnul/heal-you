@@ -41,18 +41,22 @@
                         class="w-full max-w-[70px] max-h-[70px] object-contain" alt="">
                     <div class="flex flex-wrap items-center justify-between w-full gap-1">
                         <div class="flex flex-col gap-1">
-                            <a href="details.html"
-                                class="text-base font-semibold stretched-link whitespace-nowrap w-[150px] truncate">
+                            <h3 class="text-base font-semibold whitespace-nowrap w-[150px] truncate">
                                 {{ $cart->product->name }}
-                            </a>
-                            <p class="text-sm text-grey">
+                            </h3>
+                            <p class="text-sm text-grey product-price" data-price="{{ $cart->product->price }}">
                                 Rp {{ $cart->product->price }}
                             </p>
                         </div>
-                        <button type="button">
-                            <img src="{{ asset('assets/svgs/ic-trash-can-filled.svg') }}" class="size-[30px]"
-                                alt="">
-                        </button>
+                        <form action="{{ route('carts.destroy', $cart) }} " method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">
+                                <img src="{{ asset('assets/svgs/ic-trash-can-filled.svg') }}" class="size-[30px]"
+                                    alt="">
+                            </button>
+
+                        </form>
                     </div>
                 </div>
             @empty
@@ -79,40 +83,35 @@
                     <p class="text-base font-semibold first:font-normal">
                         Sub Total
                     </p>
-                    <p class="text-base font-semibold first:font-normal">
-                        Rp 890.000
+                    <p class="text-base font-semibold first:font-normal" id="checkout-subtotal">
                     </p>
                 </li>
                 <li class="flex items-center justify-between">
                     <p class="text-base font-semibold first:font-normal">
                         PPN 11%
                     </p>
-                    <p class="text-base font-semibold first:font-normal">
-                        Rp 89.000
+                    <p class="text-base font-semibold first:font-normal" id="checkout-ppn">
                     </p>
                 </li>
                 <li class="flex items-center justify-between">
                     <p class="text-base font-semibold first:font-normal">
                         Insurance 23%
                     </p>
-                    <p class="text-base font-semibold first:font-normal">
-                        Rp 120.000
+                    <p class="text-base font-semibold first:font-normal" id="checkout-insurance">
                     </p>
                 </li>
                 <li class="flex items-center justify-between">
                     <p class="text-base font-semibold first:font-normal">
-                        Delivery (Promo)
+                        Delivery Fee
                     </p>
-                    <p class="text-base font-semibold first:font-normal">
-                        Rp 10.000
+                    <p class="text-base font-semibold first:font-normal" id="checkout-delivery-fee">
                     </p>
                 </li>
                 <li class="flex items-center justify-between">
                     <p class="text-base font-bold first:font-normal">
                         Grand Total
                     </p>
-                    <p class="text-base font-bold first:font-normal text-primary">
-                        Rp 3.290.000
+                    <p class="text-base font-bold first:font-normal text-primary" id="checkout-grand-total">
                     </p>
                 </li>
             </ul>
@@ -142,7 +141,7 @@
                 <p class="text-base font-semibold">
                     Credits
                 </p>
-                </lab>
+            </label>
         </div>
         <div class="p-4 mt-0.5 bg-white rounded-3xl hidden" id="manualPaymentDetail">
             <div class="flex flex-col gap-5">
@@ -152,13 +151,13 @@
                 <div class="inline-flex items-center gap-2.5">
                     <img src="{{ asset('assets/svgs/ic-bank.svg') }}" class="size-5" alt="">
                     <p class="text-base font-semibold">
-                        Send Payment to
+                        Husnul Nawafil
                     </p>
                 </div>
                 <div class="inline-flex items-center gap-2.5">
                     <img src="{{ asset('assets/svgs/ic-security-card.svg') }}" class="size-5" alt="">
                     <p class="text-base font-semibold">
-                        083902093092
+                        7772379865
                     </p>
                 </div>
             </div>
@@ -231,7 +230,7 @@
                 <p class="text-sm text-grey mb-0.5">
                     Grand Total
                 </p>
-                <p class="text-lg min-[350px]:text-2xl font-bold text-white">
+                <p class="text-lg min-[350px]:text-2xl font-bold text-white" id="checkout-grand-total-price">
                     Rp 3.290.000
                 </p>
             </div>
@@ -246,6 +245,47 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{{ asset('scripts/global.js') }}"></script>
+
+    <script>
+        function calculatePrice() {
+            let subTotal = 0;
+            let deliveryFee = 10000;
+            let ppn = 0;
+            let insurance = 0;
+
+            document.querySelectorAll('.product-price').forEach(item => {
+                subTotal += parseFloat(item.getAttribute('data-price'));
+            });
+
+            ppn = 0.11 * subTotal;
+            insurance = 0.23 * subTotal;
+
+            let grandTotal = subTotal + deliveryFee + ppn + insurance;
+
+            document.getElementById('checkout-delivery-fee').textContent =
+                `Rp ${deliveryFee.toLocaleString('id', {minimumFractionDigits:2, maximumFractionDigits:2})}`
+
+            document.getElementById('checkout-subtotal').textContent =
+                `Rp ${subTotal.toLocaleString('id', {minimumFractionDigits:2, maximumFractionDigits:2})}`
+
+            document.getElementById('checkout-ppn').textContent =
+                `Rp ${ppn.toLocaleString('id', {minimumFractionDigits:2, maximumFractionDigits:2})}`
+
+            document.getElementById('checkout-insurance').textContent =
+                `Rp ${insurance.toLocaleString('id', {minimumFractionDigits:2, maximumFractionDigits:2})}`
+
+            document.getElementById('checkout-grand-total').textContent =
+                `Rp ${grandTotal.toLocaleString('id', {minimumFractionDigits:2, maximumFractionDigits:2})}`
+
+            document.getElementById('checkout-grand-total-price').textContent =
+                `Rp ${grandTotal.toLocaleString('id', {minimumFractionDigits:0, maximumFractionDigits:2})}`
+
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            calculatePrice();
+        });
+    </script>
 </body>
 
 </html>
