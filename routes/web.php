@@ -1,15 +1,17 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTransactionController;
 use App\Http\Controllers\ProfileController;
 use App\Models\ProductTransaction;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [FrontController::class, 'index'])->name('front.index');
+Route::get('/search', [FrontController::class, 'search'])->name('front.search');
+Route::get('/details/{product:slug}', [FrontController::class, 'details'])->name('front.product.details');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -26,6 +28,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('products', ProductController::class)->middleware('role:owner');
         Route::resource('categories', CategoryController::class)->middleware('role:owner');
     });
+
+    Route::resource('carts', CartController::class)->middleware('role:buyer');
+    Route::post('cart/add/{productId}', [CartController::class,'store'])->middleware('role:buyer')->name('carts.store');
 });
 
 require __DIR__.'/auth.php';
