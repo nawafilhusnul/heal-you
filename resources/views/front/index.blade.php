@@ -20,7 +20,12 @@
             </div>
             <div class="">
                 <p class="text-base font-semibold capitalize text-primary">
-                    {{ Auth::user()->name ?? 'Hi Luv!' }}
+                    @auth
+                        {{ Auth::user()->name }}
+                    @endauth
+                    @guest
+                        Please Login
+                    @endguest
                 </p>
                 <p class="text-sm">
                     Customer
