@@ -98,6 +98,14 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @role('buyer')
+                <x-responsive-nav-link :href="route('front.index')" :active="request()->routeIs('front.index')">
+                    {{ __('Store') }}
+                </x-responsive-nav-link>
+            @endrole
+            <x-responsive-nav-link :href="route('product_transactions.index')" :active="request()->routeIs('product_transactions.index')">
+                {{ Auth::user()->hasRole('owner') ? __('Store Orders') : __('My Transactions') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
