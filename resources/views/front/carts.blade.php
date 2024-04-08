@@ -175,8 +175,11 @@
                     class="transition-all duration-300 -rotate-180 size-5" alt="">
             </button>
         </div>
-        <form action="" method="" class="p-6 bg-white rounded-3xl" id="deliveryForm">
+        <form enctype="multipart/form-data" action="{{ route('product_transactions.store') }}" method="POST"
+            class="p-6 bg-white rounded-3xl" id="deliveryForm">
             <div class="flex flex-col gap-5">
+                @csrf
+
                 <!-- Address -->
                 <div class="flex flex-col gap-2.5">
                     <label for="address" class="text-base font-semibold">Address</label>
@@ -193,13 +196,13 @@
                 <!-- Post Code -->
                 <div class="flex flex-col gap-2.5">
                     <label for="postcode" class="text-base font-semibold">Post Code</label>
-                    <input type="number" name="postcode" id="postcode__"
+                    <input type="number" name="post_code" id="postcode__"
                         class="form-input bg-[url('{{ asset('assets/svgs/ic-house.svg') }}')]" value="22081882">
                 </div>
                 <!-- Phone Number -->
                 <div class="flex flex-col gap-2.5">
                     <label for="phonenumber" class="text-base font-semibold">Phone Number</label>
-                    <input type="number" name="phonenumber" id="phonenumber__"
+                    <input type="number" name="phone_number" id="phonenumber__"
                         class="form-input bg-[url('{{ asset('assets/svgs/ic-phone.svg') }}')]" value="602192301923">
                 </div>
                 <!-- Add. Notes -->
@@ -214,12 +217,12 @@
                 <!-- Proof of Payment -->
                 <div class="flex flex-col gap-2.5">
                     <label for="proof_of_payment" class="text-base font-semibold">Proof of Payment</label>
-                    <input type="file" name="proof_of_payment" id="proof_of_payment__"
+                    <input type="file" name="proof" id="proof_of_payment__"
                         class="form-input bg-[url('{{ asset('assets/svgs/ic-folder-add.svg') }}')]">
                 </div>
             </div>
             </div>
-        </form>
+
     </section>
 
     <!-- Floating grand total -->
@@ -234,13 +237,13 @@
                     Rp 3.290.000
                 </p>
             </div>
-            <button type="button"
-                class="inline-flex items-center justify-center px-5 py-3 text-base font-bold text-white rounded-full w-max bg-primary whitespace-nowrap"
-                onclick="window.location.href='{{ asset('pages/success-checkout.html') }}'">
+            <button type="submit"
+                class="inline-flex items-center justify-center px-5 py-3 text-base font-bold text-white rounded-full w-max bg-primary whitespace-nowrap">
                 Confirm
             </button>
         </section>
     </div>
+    </form>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

@@ -10,7 +10,7 @@
     <div class="py-12">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white flex flex-col gap-y-5 overflow-hidden p-10 shadow-sm sm:rounded-lg">
-                <div class="item-card flex flex-row justify-between items-center">
+                <div class="item-card flex flex-col md:flex-row justify-between md:items-center gap-y-3">
                     <div class="flex flex-row items-center gap-x-3">
                         <div>
                             <p class="text-base text-slate-500">
@@ -30,11 +30,11 @@
                         </h3>
                     </div>
                     @if ($productTransaction->is_paid)
-                        <span class="px-3 py-1 rounded-full text-white bg-green-500">
+                        <span class="px-3 py-1 w-fit rounded-full text-white bg-green-500">
                             <p class="text-white font-bold text-sm">SUCCESS</p>
                         </span>
                     @else
-                        <span class="px-3 py-1 rounded-full text-white bg-orange-500">
+                        <span class="px-3 py-1 w-fit rounded-full text-white bg-orange-500">
                             <p class="text-white font-bold text-sm">PENDING</p>
                         </span>
                     @endif
@@ -44,7 +44,7 @@
                     List of Items
                 </h3>
 
-                <div class="grid grid-cols-4 gap-x-10">
+                <div class="grid md:grid-cols-4 grid-cols-1 gap-x-10 gap-y-10">
                     <div class="flex flex-col gap-y-5 col-span-2">
                         @forelse ($productTransaction->transactionDetails as $detail)
                             <div class="item-card flex flex-row justify-between items-center">
@@ -111,7 +111,7 @@
                             </h3>
                         </div>
                     </div>
-                    <div class="flex flex-col gap-y-5 col-span-2 items-end">
+                    <div class="flex flex-col gap-y-5 col-span-2 md:items-end items-start">
                         <h3 class="text-xl font-bold text-indigo-950">
                             Proof of Payment:
                         </h3>
